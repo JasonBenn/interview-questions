@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Algebra 2",
+        "prerequisites": ["Algebra 1", "Geometry"]
+    },
+    {
+        "name": "Pre Calculus",
+        "prerequisites": ["Algebra 2"]
+    }
+]
