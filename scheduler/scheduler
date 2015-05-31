@@ -1,0 +1,126 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
+require 'pry'
+require 'json'
+
+
+# Utils
+
+def read_json_file(path)
+  JSON.parse(File.read(path))
+end
+
+class DirectedAcyclicGraph
+  class CycleFoundError < ArgumentError; end
+
+  attr_reader :graph
+  attr_accessor :visited, :sorted
+
+  def initialize(graph)
+    @graph = graph
+    @visited = {}
+    @sorted = []
+  end
+
+  def topological_sort
+    graph.keys.each do |node|
+      depth_first_search(node) unless visited[node]
+    end
+    sorted
+  end
+
+  def depth_first_search(node)
+    visited[node] = true
+    graph[node].each do |connected_node|
+      begin
+        depth_first_search(connected_node) unless visited[node]
+      rescue SystemStackError
+        raise CycleFoundError, "Error: cycle detected in #{graph}. See: #{connected_node}"
+      end
+    end
+    sorted << node
+  end
+end
+
+
+# Test Suite
+
+GREEN = "\e[0;32m"
+RED = "\e[0;31m"
+RESET = "\e[1;0m"
+
+def assert(blurb, actual, expected)
+  puts (actual == expected ? "#{GREEN}✓" : "#{RED}✗") + " #{blurb}.#{RESET}"
+end
+
+def assert_true(blurb, test)
+  assert(blurb, test, true)
+end
+
+def assert_raise(blurb, expected_error, &block)
+  begin
+    block.call
+  rescue => e
+    raise e unless e.class == expected_error
+    return assert_true(blurb, true)
+  end
+  assert_true(blurb, false)
+end
+
+def all_classes_present?(courses, schedule)
+  course_names = courses.map { |course| course['name'] }.compact
+  (course_names - schedule).empty?
+end
+
+def no_duplicates?(schedule)
+  schedule.uniq.length == schedule.length
+end
+
+def all_prereqs_satisfied?(courses, schedule)
+  schedule.all? do |course_name|
+    course = courses.find { |course| course['name'] == course_name }
+
+    if course['prerequisites'].none?
+      true
+    else
+      course_index = schedule.find_index(course['name'])
+      prereq_indices = course['prerequisites'].map { |prereq| schedule.find_index prereq }
+      course_index > prereq_indices.max
+    end
+  end
+end
+
+def test_schedule_is_correct(filepath)
+  courses_json = read_json_file(filepath)
+  graph = schedule_to_graph(courses_json)
+  schedule = DirectedAcyclicGraph.new(graph).topological_sort
+  assert_true("Schedule for #{filepath} includes all classes", all_classes_present?(courses_json, schedule))
+  assert_true("Schedule for #{filepath} puts prereqs first", all_prereqs_satisfied?(courses_json, schedule))
+  assert_true("Schedule for #{filepath} has no duplicate classes", no_duplicates?(schedule))
+end
+
+def test_suite
+  test_schedule_is_correct './physics.json'
+  test_schedule_is_correct './math.json'
+  test_schedule_is_correct './not_strongly_connected.json'
+  test_schedule_is_correct './empty.json'
+
+  assert_raise("Schedule for ./cyclic_prereqs.json finds a cycle and raises an error", DirectedAcyclicGraph::CycleFoundError) do 
+    graph = schedule_to_graph(read_json_file('./cyclic_prereqs.json'))
+    DirectedAcyclicGraph.new(graph).topological_sort
+  end
+end
+
+
+# Program
+
+def schedule_to_graph(data)
+  data.map { |course| [course['name'], course['prerequisites']] }.to_h
+end
+
+case ARGV.first
+when nil then raise ArgumentError, "Error: No argument provided"
+when 'test' then test_suite
+else puts DirectedAcyclicGraph.new(schedule_to_graph(read_json_file(ARGV[0]))).topological_sort
+end
