@@ -21,9 +21,28 @@ class DirectedAcyclicGraph
     @graph = graph
     @visited = {}
     @sorted = []
+    @acyclic = nil
+  end
+
+  def verify_acyclic
+    graph.keys.each { |node| provoke_stack_overflow(node) }
+    true # encountered if no error are raised
+  end
+
+  def provoke_stack_overflow(node)
+    graph[node].each do |connected_node|
+      begin
+        provoke_stack_overflow(connected_node)
+      rescue SystemStackError
+        raise CycleFoundError, "Error: cycle detected in #{graph}. See: #{connected_node}"
+      end
+    end
   end
 
   def topological_sort
+    # (Lazily) check for cycles, memoize the result if no stack overflows encountered.
+    @acyclic ||= verify_acyclic
+
     graph.keys.each do |node|
       depth_first_search(node) unless visited[node]
     end
@@ -33,11 +52,7 @@ class DirectedAcyclicGraph
   def depth_first_search(node)
     visited[node] = true
     graph[node].each do |connected_node|
-      begin
-        depth_first_search(connected_node) unless visited[node]
-      rescue SystemStackError
-        raise CycleFoundError, "Error: cycle detected in #{graph}. See: #{connected_node}"
-      end
+      depth_first_search(connected_node) unless visited[node]
     end
     sorted << node
   end
