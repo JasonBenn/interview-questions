@@ -1,0 +1,1 @@
+var ANYTHING = { model: function() {} }
