@@ -1,0 +1,14 @@
+ok, so...
+
+i need to build a skip list.
+
+insert, remove, and find should be implemented in terms of traverse.
+
+
+# initializing:
+skipList.head = new Node() // this is undefined, not nil!
+skipList.head.next = [nil, nil, nil, nil]
+
+# insert
+skipList.insert(3)
+skipList.head.next[0] => [ ]->[3]->
