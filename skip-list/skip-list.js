@@ -45,22 +45,24 @@ function SkipList(headValue, maxHeight, probability) {
   var twentyFive = new Node(25, nodeArrayOf(2, 25))
 
   ten.next[2].next = nil;
-  ten.next[1].next = twentyThree.next[1]
-  ten.next[0].next = twentyOne.next[0]
+  ten.next[1].next = twentyThree
+  ten.next[0].next = twentyOne
 
-  twentyOne.next[0].next = twentyThree.next[0]
+  twentyOne.next[0].next = twentyThree
 
-  twentyThree.next[1].next = twentyFive.next[1]
-  twentyThree.next[0].next = twentyFive.next[0]
+  twentyThree.next[1].next = twentyFive
+  twentyThree.next[0].next = twentyFive
 
   twentyFive.next[1].next = nil
   twentyFive.next[0].next = nil
 }
 
-SkipList.prototype.print = function() {
+SkipList.prototype.toString = function() {
+  var levels = []
   for (var i = this.maxHeight - 1; i >= 0; i--) {
-    console.log(this.head.next[i].toString());
+    levels.push(this.head.next[i]);
   }
+  return this.elem + ": [" + levels.join("\n") + "]"
 }
 
 var skipList = new SkipList(1, 3, .5)
@@ -68,24 +70,28 @@ var skipList = new SkipList(1, 3, .5)
 
 SkipList.prototype.traverseTo = function(elem) {
   var traversedNodes = [];
-  var currentNode = this.head.next;
+  var currentNode = this.head;
+
+  // nextNode = currentNode.next[i]
+
+  // currentNode.next[2].next !== nil /* false, it's nil */ && currentNode.next[2].elem < elem /* never reached */
+  // traversedNodes.unshift(currentNode) /* for i === 2, add 10 */
+  // currentNode.next[1].next !== nil /* true, Node 23 */ && currentNode.next[1].elem < elem // 23 < 24? true! 
+  // currentNode = currentNode.next[1] /* Node 23 */
+  // currentNode.next[1].next !== nil /* true, it's 25 */ && currentNode.next[1].elem < elem /* 25 < 24? false. */
+  // traversedNodes.unshift(currentNode) /* for i === 1, add 23 */
+  // // i is now 0. currentNode is 23.
+  // currentNode.next[0].next !== nil /* true, it's 25 */ && currentNode.next[0].elem < elem? // 25 < 24? false!
+  // traversedNodes.unshift(currentNode) // now traversedNodes[0] is also 23.
 
   for (var i = this.maxHeight - 1; i >= 0; i--) {
-    var currentNodeAtLevel = currentNode[i];
-    var nextNode = currentNodeAtLevel.next
-    console.log('currentNodeAtLevel is ' + currentNodeAtLevel + ' and nextNode is ' + nextNode);
-    console.log('is nextNode not nil? ' + (nextNode !== nil) + ' and is it\'s elem less than ' + elem + '? ' + (nextNode.elem < elem))
-    while (nextNode !== nil && nextNode.elem < elem) {
-      console.log(nextNode.elem + ' is less than ' + elem + '!')
-      currentNode = nextNode;
-      nextNode = nextNode.next;
-      console.log('currentNode is now ' + currentNode + ' and nextNode is now ' + nextNode)
+    while (currentNode.next[i] !== nil && currentNode.next[i].elem < elem) {
+      currentNode = currentNode.next[1]
     }
-    console.log('adding ' + currentNode + ' to traversedNodes.')
+
     traversedNodes.unshift(currentNode);
   }
 
-  console.log('Returning traversedNodes.')
   return traversedNodes;
 }
 console.log(skipList.traverseTo(24).map(function(list) { console.log(list.toString()) }))
@@ -123,3 +129,29 @@ SkipList.prototype.remove = function(elem) {
 
 // arrayOf helper was actually putting the same node in each position of the array! 
 // so changing a property of head.next[n] actually changed *every* node in head.next.
+
+
+// nathan.leiby@clever.com
+
+// Implement a skip list, with insert, remove in terms of insert point.
+
+
+
+
+// [h]               [7]
+// [h]         [5]   [7]
+// [h]   [3]   [5]   [7]
+// [h][1][3][4][5][6][7]
+
+// head could be anything
+
+// [3]      [8]
+// [3][4]   [8]
+// [3][4]   [8]
+// [3][4][7][8]
+
+
+
+// insert point finds the path.
+
+// SkipList({maxHeight})
