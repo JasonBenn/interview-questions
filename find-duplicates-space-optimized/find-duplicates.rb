@@ -1,9 +1,13 @@
-# create a hash map of numbers you've seen, return when you try to add an num that already exists.
-  # O(N) space, O(N) time.
-# for each element, search the entire array for a duplicate.
-  # O(1) space, O(N^2) time.
-# sort the array as you go from left to right, look for neighbors that are the same.
-  # O(1) space, O(N*log(N)) time. But mutates the array...
+# Done. Review:
+  # I did a good job of generating possibilities and dismissing them for Big O reasons.
+  # I also did a good job of considering the drawbacks of mutating input.
+  # The solution took some hints, but when the lightbulb clicked, I settled on the right solution.
+  # I also did a great job debugging! I never really got stuck.
+# Cons:
+  # This was great! Good job man!
+  # There is a bonus question, though:
+    # This function always returns one duplicate, but there may be several duplicates. Write a function that returns all duplicates.
+
 
 require 'pry'
 require_relative 'tiny_test_framework'
@@ -54,23 +58,3 @@ assert('find 1 in a short array (of 2)', find_duplicate(input, (1..n)), 1)
 n = 1
 input = [1, 1]
 assert('find 1 in the shortest array (of 1)', find_duplicate(input, (1..n)), 1)
-
-
-
-__END__
-
-[5, 3, 2, 4, 1, 1]
-integers: (1..5)
-I can selection sort in memory all ints from 1..2, checking for dupes.
-Then I can selection sort in memory all ints from 2..3.
-But that's (N^2) time.
-Is there a faster sort than breaks things down into chunks?
-
-Binary search only cuts things in half 
-
-
-COUNTING.
-
-Binary count: the integers in 1..N/2, N/2+1..N.
-Whichever one is larger than expected, must contain a duplicate.
-Narrow in on that guy.
