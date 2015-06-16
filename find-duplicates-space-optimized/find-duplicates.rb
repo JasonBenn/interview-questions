@@ -9,33 +9,34 @@ require 'pry'
 require_relative 'tiny_test_framework'
 
 def find_duplicate(input, search_bounds)
-  first = search_bounds.first
-  last = search_bounds.last
-  middle = (first + last) / 2
+  until (search_bounds.first == search_bounds.last)
+    first = search_bounds.first
+    last = search_bounds.last
+    middle = (first + last) / 2
 
-  return first if first == last
+    # Define the array into two halves.
+    lower_half = (first..middle)
+    upper_half = (middle + 1..last)
 
-  # Define the array into two halves.
-  lower_half = (first..middle)
-  upper_half = (middle + 1..last)
+    # If a half had one of each number, it'd be:
+    lower_min_count = lower_half.last - lower_half.first + 1
+    upper_min_count = upper_half.last - upper_half.first + 1
 
-  # If a half had one of each number, it'd be:
-  lower_min_count = lower_half.last - lower_half.first + 1
-  upper_min_count = upper_half.last - upper_half.first + 1
+    # Counter variables.
+    lower_actual_count = 0
+    upper_actual_count = 0
 
-  # Counter variables.
-  lower_actual_count = 0
-  upper_actual_count = 0
-
-  input.each do |element|
-    if lower_half.cover? element
-      lower_actual_count += 1
-      return find_duplicate(input, lower_half) if lower_actual_count > lower_min_count
-    elsif upper_half.cover? element
-      upper_actual_count += 1
-      return find_duplicate(input, upper_half) if upper_actual_count > upper_min_count
+    input.each do |element|
+      if lower_half.cover? element
+        lower_actual_count += 1
+        search_bounds = lower_half if lower_actual_count > lower_min_count
+      elsif upper_half.cover? element
+        upper_actual_count += 1
+        search_bounds = upper_half if upper_actual_count > upper_min_count
+      end
     end
   end
+  search_bounds.first
 end
 
 n = 10
