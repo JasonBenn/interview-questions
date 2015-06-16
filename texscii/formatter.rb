@@ -1,3 +1,5 @@
+# Unfinished (in either ES6 or Ruby.)
+
 require 'pry'
 
 class Exponent

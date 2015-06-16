@@ -1,3 +1,5 @@
+# Unfinished
+
 # Given an array_of_ints, find the highest_product you can get from three of the integers.
 # The input array_of_ints will always have at least three integers.
 # What about with negative numbers?

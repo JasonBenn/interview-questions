@@ -1,3 +1,17 @@
+# Done!
+
+# Good job:
+# Your first implementation was good! Simple, Rubyesque, elegant. Just not performant.
+# Your second solution was more performant - it's a basic lexer.
+# Testing framework is getting better, too.
+
+# Needs improvement:
+# Second solution could use a refactor, there's some duplicated and unnecessarily confusing logic.
+# You didn't consider enough edge cases.
+  # Bill could be a name or a word. In this case, capitalization matters. If something is consistently capitalized, it should be considered a different word.
+# Should mention the limitations of this solution.
+  # Bill could refer to a name ~or~ a receipt, capitalized because it's the start of a sentence. You should mention that this solution won't be 100% accurate.
+
 require 'pry'
 require_relative 'tiny_test_framework'
 
@@ -31,17 +45,3 @@ end
 assert('word cloud', word_cloud(input_one), {"after"=>1, "beating"=>1, "the"=>2, "eggs"=>1, "dana"=>1, "read"=>1, "next"=>1, "step"=>1})
 assert('word cloud', word_cloud(input_two), {"add"=>2, "milk"=>1, "and"=>2, "eggs"=>1, "then"=>1, "flour"=>1, "sugar"=>1})
 assert('word cloud', word_cloud(input_three), {"we"=>4, "came"=>1, "saw"=>1, "conquered"=>1, "then"=>1, "ate"=>1, "bill's"=>1, "mille"=>1, "feuille"=>1, "cake"=>1})
-
-# Done!
-
-# Good job:
-# Your first implementation was good! Simple, Rubyesque, elegant. Just not performant.
-# Your second solution was more performant - it's a basic lexer.
-# Testing framework is getting better, too.
-
-# Needs improvement:
-# Second solution could use a refactor, there's some duplicated and unnecessarily confusing logic.
-# You didn't consider enough edge cases.
-  # Bill could be a name or a word. In this case, capitalization matters. If something is consistently capitalized, it should be considered a different word.
-# Should mention the limitations of this solution.
-  # Bill could refer to a name ~or~ a receipt, capitalized because it's the start of a sentence. You should mention that this solution won't be 100% accurate.

@@ -1,3 +1,5 @@
+# Works, but what is this?
+
 def rotate(matrix)
 	rotated = Array.new(matrix[0].length) { Array.new(matrix.length) }
 	matrix.each_with_index do |row, row_index|

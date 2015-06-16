@@ -1,3 +1,8 @@
+# Done. Review:
+  # The solution works, it's just not perfect.
+  # The actual solution required one more intuitive leap - that you should decrement the skipping distance the closer you get to the top floor.
+  # However, this is pretty decent.
+
 require 'pry'
 
 levels = 100

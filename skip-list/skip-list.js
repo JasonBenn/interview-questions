@@ -1,3 +1,8 @@
+// Review:
+  // Don't be dispirited - this would be hard in Ruby, and you're trying it in ES6.
+  // Unfinished.
+
+
 var assert = require('tiny-test')
 var _ = require('underscore')
 

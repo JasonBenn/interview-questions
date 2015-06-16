@@ -1,3 +1,5 @@
+# Done!
+
 require 'pry'
 
 # Determine if a list of Cartesian points are collinear

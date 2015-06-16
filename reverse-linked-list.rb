@@ -1,3 +1,5 @@
+# What is this? Unfinished?
+
 # key insight: represent the end of a list as Node(nil), not nil.
 require 'pry'
 

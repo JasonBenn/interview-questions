@@ -1,3 +1,7 @@
+// Works!
+// First complex problem solved in ES6!
+// Nice job.
+
 import 'source-map-support/register'
 import 'babel/polyfill'
 import {_ as __} from 'lodash'
