@@ -12,7 +12,8 @@
 require 'pry'
 require_relative 'tiny_test_framework'
 
-def find_duplicate(input, search_bounds)
+def find_duplicate(input, n)
+  search_bounds = (1..n)
   until (search_bounds.first == search_bounds.last)
     first = search_bounds.first
     last = search_bounds.last
@@ -45,16 +46,16 @@ end
 
 n = 10
 input = [10, 8, 5, 2, 3, 9, 1, 3, 4, 7, 6]
-assert('find 3 in even array (of 10)', find_duplicate(input, (1..n)), 3)
+assert('find 3 in even array (of 10)', find_duplicate(input, n), 3)
 
 n = 9
 input = [8, 5, 2, 8, 9, 1, 3, 4, 7, 6]
-assert('find 8 in an odd array (of 9)', find_duplicate(input, (1..n)), 8)
+assert('find 8 in an odd array (of 9)', find_duplicate(input, n), 8)
 
 n = 2
 input = [1, 2, 1]
-assert('find 1 in a short array (of 2)', find_duplicate(input, (1..n)), 1)
+assert('find 1 in a short array (of 2)', find_duplicate(input, n), 1)
 
 n = 1
 input = [1, 1]
-assert('find 1 in the shortest array (of 1)', find_duplicate(input, (1..n)), 1)
+assert('find 1 in the shortest array (of 1)', find_duplicate(input, n), 1)
