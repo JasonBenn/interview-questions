@@ -1,80 +1,47 @@
-/*
-
-cake_tuples = [(7, 160), (3, 90), (2, 15)]
-capacity    = 20
-
-
-low capacity, large cakes: no solution
-f([(2, 20)], 1) => 0
-
-high capacity, one type of cake: fill the bag with what i can fit
-f([(5, 20)], 20): 80
-
-high capacity, one type of cake, remainder: fill the bag
-f([(5, 20)], 23): 80
-
-high capacity, two types of cake, remainder filled by second type: fill the bag
-f([(5, 20), (3, 5)], 23): 85
-
-cake_tuples = [(7, 160), (3, 90), (2, 15)]
-22.8, 30, 7.5
-
-if capacity is a multiple of the most valuable type of cake, use that cake
-
-
-first subproblem:
-* find cake values
-* are certain cakes ever worth it?
-* is it a multiple of the most valuable type of cake? if so, fill the bag with that.
-* can we fill the remainder with smaller cake?
-
-capacity = 20
-
-KNOWNS:
-* cakeValue
-* cakeWeight
-* duffelCapacity
-* cakeValueByWeight
-
-UNKNOWNS:
-* optimalHaul
-* haulValue
-
-*/
+// Review:
+// Strategy that could have worked: start with a tiny piece, build up.
+// Other room for improvement: discuss tradeoffs for an efficient but non-optimal solution.
+// Maybe I could have just filled the knapsack with the most expensive cakes, then the remainder with less efficient cakes - my so called "naive solution" from last time.
+// Where this had a cost of O(n * k) (where n is number of cakes, k is size of knapsack) and a space cost of O(k) (for maxValuesAtCapacities)...
+// The non-optimal solution had a sort cost of O(nlog(n)) and a space cost of O(n) (for the sorted cakes)
 
 var __ = require('lodash');
 
+// Test framework
 function assert(expected, actual) {
   if (expected !== actual) {
-    console.log(expected.toString() + ' !== ' + actual.toString())
+    console.log('✘ ' + expected.toString() + ' !== ' + actual.toString())
   } else {
     console.log('✓')
   }
 }
 
 function selectCake(cakes, duffelCapacity) {
-  var cakesByValue = cakes.map(computeCakeValue)
-
-  var cakesByValueSorted = __.sortBy(cakesByValue, function(cake) {
-    return -cake.valueByWeight;
-  })
-
-  var mostValuableCake = cakesByValueSorted[0]
-
-  var remainingDuffelCapacity = duffelCapacity;
-
-  return __.reduce(cakesByValueSorted, function(duffelValue, cake) {
-    if (cake.weight === 0) return duffelValue;
-    var numCakes = Math.floor(remainingDuffelCapacity / cake.weight)
-    remainingDuffelCapacity -= numCakes * cake.weight;
-    return duffelValue + numCakes * cake.totalValue;
-
-  }, 0)
+  var allCapacities = __.range(1, duffelCapacity + 1);
+  var maxValuesAtCapacities = __.reduce(allCapacities, maxValueForCapacity(cakes), {0: 0})
+  return maxValuesAtCapacities[duffelCapacity];
 }
 
-function computeCakeValue(cake) {
-  var cakeValue = cake[1] / cake[0]
-  return { valueByWeight: cakeValue, weight: cake[0], totalValue: cake[1] };
+function maxValueForCapacity(cakes) {
+  return function(maxValuesAtCapacities, capacity) {
+    var maxValueForCapacity = 0;
+
+    cakes.forEach(function(cake) {
+      var weight = cake[0]
+      var value = cake[1]
+
+      if (weight > capacity) return;
+
+      var remainder = capacity - weight
+      var possibleMaxValue = maxValuesAtCapacities[remainder] + value;
+      if (possibleMaxValue > maxValueForCapacity) {
+        maxValueForCapacity = possibleMaxValue;
+      }
+    })
+
+    maxValuesAtCapacities[capacity] = maxValueForCapacity;
+    return maxValuesAtCapacities;
+  }
 }
 
 
@@ -108,4 +75,3 @@ assert(selectCake(withZeroCake, 6), 11)
 // goal: optimal solution steps through three kinds of cakes.
 var onlyZeroCake = [[0, 0]]
 assert(selectCake(onlyZeroCake, 10), 0)
-
