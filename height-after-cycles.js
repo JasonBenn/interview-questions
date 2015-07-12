@@ -1,8 +1,8 @@
-var { Range } = require('immutable');
+import { Range } from 'immutable';
 
 function assert(actual, expected) {
   if (expected !== actual) {
-    console.log(`✘ expected: #{expected} !== actual: #{actual}`)
+    console.log(`✘ expected: ${expected} !== actual: ${actual}`)
   } else {
     console.log('✓')
   }
