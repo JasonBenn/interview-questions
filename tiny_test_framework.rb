@@ -2,7 +2,7 @@ GREEN = "\e[0;32m"
 RED = "\e[0;31m"
 RESET = "\e[1;0m"
 
-def assert(blurb, actual, expected)
+def assert(actual, expected, blurb = nil)
   summary = "#{blurb}\nActual:\t\t#{actual.inspect}\nExpected:\t#{expected.inspect}"
   puts (actual == expected ? "#{GREEN}✓ #{blurb}" : "#{RED}✗ #{summary}") + "#{RESET}"
 end
@@ -20,3 +20,4 @@ def assert_raise(blurb, expected_error, &block)
   end
   assert_true(blurb, false)
 end
+
