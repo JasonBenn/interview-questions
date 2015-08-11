@@ -1,4 +1,7 @@
 # Review: crushed it. Wrote good tests, went straight through the implementation, very few issues.
+# Didn't address alternative solutions. Could have just walked through the stack and found the max with every call to get_max.
+# This solution is more time-efficient - O(1) time for get_max, but incurs a O(n) space cost in the worst case.
+# The walk the stack solution reverses those - O(n) time cost for get_max, but no space cost.
 
 class Stack
   attr_reader :elems
