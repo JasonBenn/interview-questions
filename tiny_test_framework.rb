@@ -7,17 +7,17 @@ def assert(actual, expected, blurb = nil)
   puts (actual == expected ? "#{GREEN}✓ #{blurb}" : "#{RED}✗ #{summary}") + "#{RESET}"
 end
 
-def assert_true(blurb, test)
-  assert(blurb, test, true)
+def assert_true(test, blurb = nil)
+  assert(test, true, blurb)
 end
 
-def assert_raise(blurb, expected_error, &block)
+def assert_raise(expected_error, blurb = nil, &block)
   begin
     block.call
   rescue => e
     raise e unless e.class == expected_error
-    return assert_true(blurb, true)
+    return assert_true(true, blurb)
   end
-  assert_true(blurb, false)
+  assert_true(false, blurb)
 end
 
