@@ -35,17 +35,17 @@ assert('one node is superbalanced', one_node.superbalanced?, true)
 three_nodes_balanced = Node.new(5, Node.new(3), Node.new(6))
 assert('three nodes balanced is superbalanced', three_nodes_balanced.superbalanced?, true)
 
-five_nodes_left_heavy = Node.new(5, 
-  Node.new(3, 
-    Node.new(4), 
-    Node.new(3)), 
+five_nodes_left_heavy = Node.new(5,
+  Node.new(3,
+    Node.new(4),
+    Node.new(3)),
   Node.new(6))
 assert('five left-heavy nodes is superbalanced', five_nodes_left_heavy.superbalanced?, true)
 
-five_unbalanced = Node.new(5, 
-  Node.new(3, 
-    Node.new(4), 
-    Node.new(3, 
+five_unbalanced = Node.new(5,
+  Node.new(3,
+    Node.new(4),
+    Node.new(3,
       Node.new(6)
     )),
   Node.new(1))

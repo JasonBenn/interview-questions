@@ -9,19 +9,19 @@ def assert(description, actual, expected)
 end
 
 class Node
-  attr_accessor :value, :nxt
+  attr_accessor :val, :nxt
 
-  def initialize(value, nxt = nil)
-    @value = value
+  def initialize(val, nxt = nil)
+    @val = val
     @nxt = nxt
   end
 
   def ==(other_node)
-    value == other_node.value && nxt == other_node.nxt
+    val == other_node.val && nxt == other_node.nxt
   end
 
   def to_s
-    value ? value.to_s + ' -> ' + nxt.to_s : 'nil'
+    val ? val.to_s + ' -> ' + nxt.to_s : 'nil'
   end
 
 end
@@ -30,14 +30,10 @@ def reverse(head)
   current = head
   previous = Node.new(nil)
   nxt = Node.new(nil)
-  
-  while current.value
-    nxt = current.nxt
 
-    current.nxt = previous
-
-    previous = current
-    current = nxt
+  while current.val
+    nxt, current.nxt = current.nxt, previous
+    previous, current = current, nxt
   end
 
   previous
@@ -51,10 +47,10 @@ no_items = nil_node
 
 
 
-puts three_items.to_s
-puts two_items.to_s
-puts one_item.to_s
-puts no_items.to_s
+# puts three_items.to_s
+# puts two_items.to_s
+# puts one_item.to_s
+# puts no_items.to_s
 
 assert('Reversing an empty list', reverse(no_items), nil_node)
 assert('Reversing a one-item list', reverse(one_item), Node.new('f', nil_node))
