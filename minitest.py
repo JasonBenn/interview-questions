@@ -1,5 +1,5 @@
 def test_equals(a, b):
     if a == b:
-        print("🍏")
+        print("🍏", end=" ", flush=True)
     else:
-        print("👹 ", a, b)
+        print("\n👹 ", a, b, flush=True)
