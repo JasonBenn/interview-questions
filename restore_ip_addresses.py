@@ -21,17 +21,14 @@ def valid(tail_digits, head_tuples):
 def extend_last_head_tuple(tail_digits, head_tuples):
     return tail_digits[1:], head_tuples[:-1] + [head_tuples[-1] + tail_digits[0]]
 
-
 def create_new_tuple(tail_digits, head_tuples):
     return tail_digits[1:], head_tuples + [tail_digits[0]]
 
 def children(tail_digits, head_tuples):
-    if len(head_tuples) is 0:
-        extension_techniques = [create_new_tuple]
-    elif len(tail_digits) is 0:
-        extension_techniques = []
-    else:
-        extension_techniques = [extend_last_head_tuple, create_new_tuple]
+    if len(tail_digits) is 0:
+        return
+
+    extension_techniques = [extend_last_head_tuple, create_new_tuple] if len(head_tuples) else [create_new_tuple]
 
     for extension_technique in extension_techniques:
         candidate_tail, candidate_head = extension_technique(tail_digits, head_tuples)
